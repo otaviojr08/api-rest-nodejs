@@ -20,7 +20,7 @@ router.get('/:id', async(req, res) => {
 
     try{
         if(isNaN(id))
-            throw 'Id is not number';
+            throw 'ID is not number';
 
         const product = await Product.findOne({
             where: {id}
@@ -50,6 +50,30 @@ router.post('/', async(req, res) => {
         res.status(200).send(product);
     }catch(err){
         res.status(400).send({error: `Creation failed: ${err}`});
+    }
+});
+
+router.delete('/:id', async(req, res) => {
+    let {id} = req.params;
+
+    try{
+        if(isNaN(id))
+            throw 'ID is not number';
+        
+        const product = await Product.findOne({
+            where: {id}
+        });
+
+        if(!product)
+            throw 'Product not found';
+        
+        await Product.destroy({
+            where: {id}
+        });
+        
+        res.status(200).send(product);
+    }catch(err){
+        res.status(400).send({error: `Failed to delete: ${err}`});
     }
 });
 
