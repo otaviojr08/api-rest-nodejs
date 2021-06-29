@@ -77,4 +77,33 @@ router.delete('/:id', async(req, res) => {
     }
 });
 
+router.put('/:id', async(req, res) => {
+    let {id} = req.params;
+    let {name, description, price} = req.body;
+    try{
+        if(isNaN(id))
+            throw 'ID is not number';
+        
+        let product = await Product.findOne({
+            where: {id}
+        });
+
+        if(!product)
+            throw 'Product not found';
+
+        await Product.update({
+            name: (name) ? name : product.name,
+            description: (description) ? description : product.description,
+            price: (price) ? price : product.price
+        },{
+            where: {id}
+        });
+        
+        res.status(200).send(req.body);
+
+    }catch(err){
+        res.status(400).send({error: `Failed to update: ${err}`});
+    }
+});
+
 module.exports = router;
