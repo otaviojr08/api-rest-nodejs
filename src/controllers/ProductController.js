@@ -36,9 +36,12 @@ router.get('/:id', async(req, res) => {
 });
 
 router.post('/', async(req, res) => {
-    let {name} = req.body;
+    let {name, description, price} = req.body;
 
     try{
+        if(!name || !description || !price)
+            throw 'There are empty fields'; 
+
         let product = await Product.findOne({
             where: {name}
         });
