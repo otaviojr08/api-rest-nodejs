@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
+const authenticate = require('../midlewares/authenticate');
 
-router.get('/', async(req, res) => {
+router.get('/', authenticate, async(req, res) => {
     try{
         const products = await Product.findAll();
         
@@ -15,7 +16,7 @@ router.get('/', async(req, res) => {
     }
 });
 
-router.get('/:id', async(req, res) => {
+router.get('/:id', authenticate, async(req, res) => {
     let {id} = req.params;
 
     try{
@@ -35,7 +36,7 @@ router.get('/:id', async(req, res) => {
     }
 });
 
-router.post('/', async(req, res) => {
+router.post('/', authenticate, async(req, res) => {
     let {name, description, price} = req.body;
 
     try{
@@ -56,7 +57,7 @@ router.post('/', async(req, res) => {
     }
 });
 
-router.delete('/:id', async(req, res) => {
+router.delete('/:id', authenticate, async(req, res) => {
     let {id} = req.params;
 
     try{
@@ -80,7 +81,7 @@ router.delete('/:id', async(req, res) => {
     }
 });
 
-router.put('/:id', async(req, res) => {
+router.put('/:id', authenticate, async(req, res) => {
     let {id} = req.params;
     let {name, description, price} = req.body;
     try{
